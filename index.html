@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CPU Scheduling Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>CPU Scheduling Visualizer</h1>
+    <div class="sub">FCFS • SJF • Round Robin • Priority • SRTF</div>
+  </header>
+
+  <div class="container">
+    <!-- Controls -->
+    <div class="card">
+      <div class="controls">
+        <div class="field">
+          <label>Algorithm</label>
+          <select id="algo">
+            <option value="FCFS">FCFS (First Come First Serve)</option>
+            <option value="SJF">SJF (Shortest Job First)</option>
+            <option value="RR">Round Robin (RRS)</option>
+            <option value="PR">Priority (Lower number = Higher priority)</option>
+            <option value="SRTF">SRTF (Shortest Remaining Time First)</option>
+          </select>
+        </div>
+        <div class="field" id="qField" style="display:none">
+          <label>Time Quantum (RR only)</label>
+          <input type="number" id="quantum" min="1" value="2" />
+        </div>
+        <div class="field"><button id="compute">Compute Schedule</button></div>
+        <div class="field"><button class="ghost" id="addRow">Add Process</button></div>
+        <div class="field"><button class="ghost" id="seed">Seed Sample</button></div>
+        <div class="field"><button class="ghost" id="reset">Reset</button></div>
+        <div class="tag">
+          <span class="mini">Scale:</span> <strong id="scaleLabel">20</strong><span class="mini">px/unit</span>
+          <input type="range" id="scale" min="8" max="40" value="20" style="width:160px; accent-color:#6aa6ff; margin-left:10px;"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Process Table -->
+    <div class="card" style="margin-top:12px">
+      <h2>Processes</h2>
+      <div class="hint">Enter <strong>Arrival Time</strong>, <strong>Burst Time</strong>, and <strong>Priority</strong>.</div>
+      <div style="overflow:auto; max-height: 360px; margin-top:10px">
+        <table id="ptable">
+          <thead>
+            <tr>
+              <th>PID</th>
+              <th>Arrival</th>
+              <th>Burst</th>
+              <th>Priority</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Gantt Chart -->
+    <div class="card" style="margin-top:12px">
+      <h2>Gantt Chart</h2>
+      <div class="gantt-wrap">
+        <div id="gantt" class="gantt"></div>
+        <div id="ticks" class="tickbar" style="margin-top:8px"></div>
+      </div>
+      <div class="hint" style="margin-top:8px">Blocks are proportional to time. Timestamps appear at block boundaries.</div>
+    </div>
+
+    <!-- Metrics (now below Gantt Chart) -->
+    <div class="card" style="margin-top:12px">
+      <h2>Metrics</h2>
+      <div class="metrics" id="metrics">
+        <div class="kpi"><div class="mini">Avg Completion Time</div><div class="v" id="avgCT">—</div></div>
+        <div class="kpi"><div class="mini">Avg Turnaround Time</div><div class="v" id="avgTAT">—</div></div>
+        <div class="kpi"><div class="mini">Avg Waiting Time</div><div class="v" id="avgWT">—</div></div>
+        <div class="kpi"><div class="mini">Throughput (jobs/unit)</div><div class="v" id="throughput">—</div></div>
+      </div>
+      <div id="err" class="error" style="margin-top:8px"></div>
+      <div class="legend" id="legend" style="margin-top:12px"></div>
+    </div>
+
+    <!-- Detailed Results -->
+    <div class="card" style="margin-top:12px">
+      <h2>Detailed Results</h2>
+      <div style="overflow:auto">
+        <table id="rtable">
+          <thead>
+            <tr>
+              <th>PID</th>
+              <th>Arrival</th>
+              <th>Burst</th>
+              <th>Priority</th>
+              <th>Start</th>
+              <th>Completion (CT)</th>
+              <th>Turnaround (TAT)</th>
+              <th>Waiting (WT)</th>
+              <th>Response</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
